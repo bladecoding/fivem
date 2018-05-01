@@ -5,8 +5,10 @@ using System.Security;
 namespace CitizenFX.Core.Native
 {
     public static class Function
-    {
-        public static T Call<T>(Hash hash, params InputArgument[] arguments)
+	{
+		internal static long CallCount = 0;
+
+		public static T Call<T>(Hash hash, params InputArgument[] arguments)
         {
             return (T)InvokeInternal(hash, typeof(T), arguments);
         }
@@ -18,6 +20,7 @@ namespace CitizenFX.Core.Native
 
         private static object InvokeInternal(Hash nativeHash, Type returnType, InputArgument[] args)
         {
+			CallCount++;
             using (var scriptContext = new ScriptContext())
             {
                 foreach (var arg in args)
